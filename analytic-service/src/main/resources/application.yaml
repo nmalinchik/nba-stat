@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: analytic-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nba_stats
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default_schema: statistic
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    type: redis
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8081
+cache:
+  redis:
+    ttl: 1

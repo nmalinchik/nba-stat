@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/NBA-stat.iml" filepath="$PROJECT_DIR$/NBA-stat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/analytic-service/analytic-service.iml" filepath="$PROJECT_DIR$/analytic-service/analytic-service.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: player-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nba_stats
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: player
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    schemas: player
+    default-schema: player
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8084

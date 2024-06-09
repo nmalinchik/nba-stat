@@ -1,0 +1,3 @@
+CREATE SCHEMA team;
+CREATE SCHEMA player;
+CREATE SCHEMA statistic;

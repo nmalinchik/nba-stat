@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: statistics-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nba_stats
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: statistic
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    schemas: statistic
+    default-schema: statistic
+  cloud:
+    inetutils:
+      ignored-interfaces:
+        - docker0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+server:
+  port: 8085

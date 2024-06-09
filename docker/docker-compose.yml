@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14.0
+    environment:
+      POSTGRES_DB: nba_stats
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+
+  eureka-server:
+    restart: always
+    build:
+      context: ../eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    restart: always
+    build:
+      context: ../api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+    environment:
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+
+  analytic-service-1:
+    build:
+      context: ../analytic-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - postgres
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+
+#  analytic-service-2:
+#    build:
+#      context: ../analytic-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8082:8081"
+#    depends_on:
+#      - eureka-server
+#      - postgres
+#      - redis
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: password
+#      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+#
+#  analytic-service-3:
+#    build:
+#      context: ../analytic-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8083:8081"
+#    depends_on:
+#      - eureka-server
+#      - postgres
+#      - redis
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: password
+#      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+
+  player-service:
+    build:
+      context: ../player-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+
+  statistics-service1:
+    build:
+      context: ../statistics-service
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+
+#  statistics-service2:
+#    build:
+#      context: ../statistics-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8086:8085"
+#    depends_on:
+#      - eureka-server
+#      - postgres
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: password
+#      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/
+
+  team-service:
+    build:
+      context: ../team-service
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nba_stats
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka/

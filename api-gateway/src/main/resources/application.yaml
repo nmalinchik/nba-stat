@@ -1,0 +1,35 @@
+server:
+  port: 8080
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: analytic-service
+          uri: lb://analytic-service
+          predicates:
+            - Path=/analytic/
+
+        - id: player-service
+          uri: lb://player-service
+          predicates:
+            - Path=/player/**
+
+        - id: statistics-service
+          uri: lb://statistics-service
+          predicates:
+            - Path=/statistic/**
+
+        - id: team-service
+          uri: lb://team-service
+          predicates:
+            - Path=/team/**
+  application:
+    name: api-gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
