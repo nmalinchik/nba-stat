@@ -22,7 +22,7 @@ This project is a microservices-based application for managing NBA statistics. T
 
 1. **Clone the repository**:
    ```bash
-   git clone [<repository-url>](https://github.com/nmalinchik/nba-stat.git)
+   git clone [repository-url](https://github.com/nmalinchik/nba-stat.git)
    cd NBA-stat
    ```
 
